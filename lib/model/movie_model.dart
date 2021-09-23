@@ -1,5 +1,5 @@
-class Movie {
-  Movie({
+class MovieModel {
+  MovieModel({
     required this.searchType,
     required this.expression,
     required this.results,
@@ -10,7 +10,7 @@ class Movie {
   late final List<Results> results;
   late final String errorMessage;
 
-  Movie.fromJson(Map<String, dynamic> json){
+  MovieModel.fromJson(Map<String, dynamic> json){
     searchType = json['searchType'];
     expression = json['expression'];
     results = List.from(json['results']).map((e)=>Results.fromJson(e)).toList();

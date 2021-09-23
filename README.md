@@ -2,9 +2,14 @@
 
 A Simple Movies Search app.
 
+##Before You run the app
+
+Rename the .env.example to .env and add your own IMDB API Key there.
+
+
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Rename the .env.example to .env and add your own IMDB API Key there.
 
 A few resources to get you started if this is your first Flutter project:
 
