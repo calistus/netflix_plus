@@ -16,8 +16,9 @@ class MoviesLoading extends MoviesState {
 
 class MoviesLoaded extends MoviesState {
   final MovieModel movies;
+  final List<RatingModel> ratings;
 
-  const MoviesLoaded(this.movies);
+  const MoviesLoaded(this.movies, this.ratings);
   @override
   List<Object> get props => [movies];
 }
