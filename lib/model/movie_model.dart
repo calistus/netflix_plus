@@ -5,6 +5,7 @@ class MovieModel {
     required this.results,
     required this.errorMessage,
   });
+
   late final String searchType;
   late final String expression;
   late final List<Results> results;
@@ -24,6 +25,11 @@ class MovieModel {
     _data['results'] = results.map((e)=>e.toJson()).toList();
     _data['errorMessage'] = errorMessage;
     return _data;
+  }
+
+  @override
+  String toString() {
+    return 'MovieModel{searchType: $searchType, expression: $expression, results: $results, errorMessage: $errorMessage}';
   }
 }
 
@@ -58,4 +64,5 @@ class Results {
     _data['description'] = description;
     return _data;
   }
+
 }
