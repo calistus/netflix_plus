@@ -32,7 +32,7 @@ class RatingModel {
     fullTitle = json['fullTitle'];
     type = json['type'];
     year = json['year'];
-    imDb = json['imDb'];
+    imDb = json['imDb'] == ""? "0.0" :json['imDb'];
     metacritic = json['metacritic'];
     theMovieDb = json['theMovieDb'];
     rottenTomatoes = json['rottenTomatoes'];

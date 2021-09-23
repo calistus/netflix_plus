@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:netflix_plus/bloc/movies_bloc.dart';
 import 'package:netflix_plus/model/movie_model.dart';
 import 'package:netflix_plus/model/rating_model.dart';
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late MoviesBloc moviesBloc;
   final _formKey = GlobalKey<FormState>();
   TextEditingController searchKeyController = TextEditingController();
-
 
   @override
   void initState() {
@@ -74,25 +74,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 10.0,
                 ),
               ),
-               SliverToBoxAdapter(child:  Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: ElevatedButton(
-
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      moviesBloc.add(SearchMovie(searchKeyController.text));
-                    }
-                  },
-                  child: const Text("Search"),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black87,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 20),
-                      textStyle: const TextStyle(
-                          fontSize: 20,)),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        moviesBloc.add(SearchMovie(searchKeyController.text));
+                      }
+                    },
+                    child: const Text("Search"),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.black87,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                        )),
+                  ),
+                ),
               ),
-               ),),
               BlocConsumer<MoviesBloc, MoviesState>(
                 listener: (context, state) {},
                 builder: (context, state) {
@@ -109,8 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 150,
                           ),
                           Icon(Icons.movie),
-                          Text("What movie are you looking for?",style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 20.0)),
+                          Text("What movie are you looking for?",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 20.0)),
                           Text("Search above to Get started")
                         ],
                       ),
@@ -164,12 +167,11 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _formKey,
         child: TextFormField(
           controller: searchKeyController,
-            textAlign: TextAlign.center,
+          textAlign: TextAlign.center,
           validator: (input) =>
               input!.isEmpty ? 'Please enter a Movie title' : null,
           onSaved: (input) => searchKey = input!,
           decoration: const InputDecoration(
-
               hintText: "Type your search here",
               hintStyle: TextStyle(color: Colors.black26),
               filled: true,
@@ -232,7 +234,38 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       padding: EdgeInsets.all(10.0),
                       color: Colors.white,
-                      child: Text("12"),
+                      child: RatingStars(
+                        value: double.parse(rating.imDb),
+                        onValueChanged: (v) {
+                          //
+                          setState(() {
+                            //value = v;
+                          });
+                        },
+                        starBuilder: (index, color) => Icon(
+                          Icons.star,
+                          color: color,
+                        ),
+                        starCount: 10,
+                        starSize: 20,
+                        valueLabelColor: const Color(0xff9b9b9b),
+                        valueLabelTextStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 12.0),
+                        valueLabelRadius: 10,
+                        maxValue: 10,
+                        starSpacing: 2,
+                        maxValueVisibility: true,
+                        valueLabelVisibility: true,
+                        animationDuration: Duration(milliseconds: 1000),
+                        valueLabelPadding: const EdgeInsets.symmetric(
+                            vertical: 1, horizontal: 8),
+                        valueLabelMargin: const EdgeInsets.only(right: 8),
+                        starOffColor: const Color(0xffe7e8ea),
+                        starColor: Colors.yellow,
+                      ),
                     ))
               ]),
               GestureDetector(
