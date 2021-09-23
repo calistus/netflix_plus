@@ -2,7 +2,7 @@
 
 A Simple Movies Search app.
 
-##Before You run the app
+## Before You run the app
 
 Rename the .env.example to .env and add your own IMDB API Key there.
 
