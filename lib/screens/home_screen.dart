@@ -215,6 +215,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                 ),
                 Positioned(
+                  left: 8,
+                  top: 8,
+                  child: GestureDetector(
+                      onTap: () async {
+                        List<Results> currentHidden =
+                        await MovieRepository().getHiddenMovies();
+                        List<Results> same = currentHidden
+                            .where((element) => element.id == movie.id)
+                            .toList();
+                        if (same.isNotEmpty) {
+                          UIUtils.showToast("Movie already on already hidden. You won't see it on future search");
+                        } else {
+                          currentHidden.add(movie);
+                          MovieRepository().hideMovie(currentHidden);
+                        }
+                      },
+                      child: hideIcon()),
+                ),
+                Positioned(
                   right: 8,
                   top: 8,
                   child: GestureDetector(
@@ -317,7 +336,13 @@ class _HomeScreenState extends State<HomeScreen> {
       size: 24.0,
     );
   }
-
+  Widget hideIcon() {
+    return Icon(
+      Icons.hide_image,
+      color: Colors.grey.shade800,
+      size: 24.0,
+    );
+  }
   Future<void> initConnectivity() async {
     late ConnectivityResult result;
     try {
@@ -340,7 +365,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     setState(() {
       _connectionStatus = result;
-      UIUtils.showToast(result.toString());
+      if(result == ConnectivityResult.none){
+        UIUtils.showToast("Internet connection lost");
+      }
     });
   }
 }

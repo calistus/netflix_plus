@@ -11,13 +11,12 @@ class MovieRepository{
 
   Future<MovieModel?> searchMovie(String searchExpression) async{
     Dio dio = Dio();
-    print(searchExpression);
-    print(APIConfig.baseURL(endpoint: "/SearchMovie")+"/$searchExpression");
       var response = await dio.get(APIConfig.baseURL(endpoint: "/SearchMovie")+"/$searchExpression");
       print(response.data);
+
       if(response.statusCode == 200){
-        return MovieModel.fromJson(response.data);
-      }else{
+        return response.data['errorMessage'].isEmpty? MovieModel.fromJson(response.data): throw Exception(response.data['errorMessage']);
+      } else{
         throw Exception("We encountered an error");
       }
   }
@@ -48,5 +47,22 @@ class MovieRepository{
     List<String> bookMarks = prefs.getStringList("bookmarks")??[];
 
     return bookMarks.map((encondedJSon) => Results.fromJson(jsonDecode(encondedJSon))).toList();
+  }
+
+  Future<void> hideMovie(List<Results> updatedhiden) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> encondedJsonOfMovies = [];
+    for (var movie in updatedhiden) {
+      encondedJsonOfMovies.add(jsonEncode(movie.toJson()));
+    }
+    await prefs.setStringList("hidden", encondedJsonOfMovies);
+    UIUtils.showToast("Movie Hidden");
+  }
+
+  Future<List<Results>> getHiddenMovies() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> hiddenList = prefs.getStringList("hidden")??[];
+
+    return hiddenList.map((encondedJSon) => Results.fromJson(jsonDecode(encondedJSon))).toList();
   }
 }
