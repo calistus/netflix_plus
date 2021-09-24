@@ -31,7 +31,6 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       yield MoviesLoading();
 
       List<Results> currentBookMark = await MovieRepository().getBookMarks();
-      print(currentBookMark);
 
       if(currentBookMark.isEmpty){
         yield const MoviesInitial();

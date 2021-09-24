@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:netflix_plus/bloc/movies_bloc.dart';
 import 'package:netflix_plus/model/movie_model.dart';
-import 'package:netflix_plus/model/rating_model.dart';
 import 'package:netflix_plus/repository/movie_repository.dart';
 import 'package:netflix_plus/screens/full_photo_screen.dart';
 import 'package:netflix_plus/utilities/ui_utils.dart';
@@ -74,27 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 10.0,
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        moviesBloc.add(SearchMovie(searchKeyController.text));
-                      }
-                    },
-                    child: const Text("Search"),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.black87,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                        )),
-                  ),
-                ),
-              ),
+
               BlocConsumer<MoviesBloc, MoviesState>(
                 listener: (context, state) {},
                 builder: (context, state) {
@@ -164,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Form(
         key: _formKey,
         child: TextFormField(
+          textAlign: TextAlign.center,
           controller: searchKeyController,
           textInputAction: TextInputAction.search,
           onFieldSubmitted: (value) {

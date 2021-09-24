@@ -12,8 +12,6 @@ class MovieRepository{
   Future<MovieModel?> searchMovie(String searchExpression) async{
     Dio dio = Dio();
       var response = await dio.get(APIConfig.baseURL(endpoint: "/SearchMovie")+"/$searchExpression");
-      print(response.data);
-
       if(response.statusCode == 200){
         return response.data['errorMessage'].isEmpty? MovieModel.fromJson(response.data): throw Exception(response.data['errorMessage']);
       } else{
@@ -24,7 +22,6 @@ class MovieRepository{
   Future<RatingModel?> fetchMovieRating(String movieID) async{
     Dio dio = Dio();
     var response = await dio.get(APIConfig.baseURL(endpoint: "/Ratings")+"/$movieID");
-    print(response.data);
     if(response.statusCode == 200){
       return RatingModel.fromJson(response.data);
     }else{
