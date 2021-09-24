@@ -4,12 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:netflix_plus/config/api_config.dart';
 import 'package:netflix_plus/model/movie_model.dart';
 import 'package:netflix_plus/model/rating_model.dart';
+import 'package:netflix_plus/utilities/ui_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MovieRepository{
 
   Future<MovieModel?> searchMovie(String searchExpression) async{
     Dio dio = Dio();
+    print(searchExpression);
+    print(APIConfig.baseURL(endpoint: "/SearchMovie")+"/$searchExpression");
       var response = await dio.get(APIConfig.baseURL(endpoint: "/SearchMovie")+"/$searchExpression");
       print(response.data);
       if(response.statusCode == 200){
@@ -37,6 +40,7 @@ class MovieRepository{
       encondedJsonOfMovies.add(jsonEncode(movie.toJson()));
     }
     await prefs.setStringList("bookmarks", encondedJsonOfMovies);
+    UIUtils.showToast("Added to Favourite");
   }
 
   Future<List<Results>> getBookMarks() async{

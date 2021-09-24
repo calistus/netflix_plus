@@ -10,5 +10,11 @@ class SearchMovie extends MoviesEvent{
   const SearchMovie(this.searchExpression);
   @override
   List<Object?> get props => [];
+}
 
+class InitApp extends MoviesEvent{
+
+  const InitApp();
+  @override
+  List<Object?> get props => [];
 }

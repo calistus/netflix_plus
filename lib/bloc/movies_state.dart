@@ -5,6 +5,8 @@ abstract class MoviesState extends Equatable {
 }
 
 class MoviesInitial extends MoviesState {
+  const MoviesInitial();
+
   @override
   List<Object> get props => [];
 }
@@ -15,8 +17,8 @@ class MoviesLoading extends MoviesState {
 }
 
 class MoviesLoaded extends MoviesState {
-  final MovieModel movies;
-  final List<RatingModel> ratings;
+  final List<Results> movies;
+  final List<String> ratings;
 
   const MoviesLoaded(this.movies, this.ratings);
   @override

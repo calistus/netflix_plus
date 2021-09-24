@@ -9,6 +9,7 @@ import 'package:netflix_plus/bloc/movies_bloc.dart';
 import 'package:netflix_plus/model/movie_model.dart';
 import 'package:netflix_plus/model/rating_model.dart';
 import 'package:netflix_plus/repository/movie_repository.dart';
+import 'package:netflix_plus/screens/full_photo_screen.dart';
 import 'package:netflix_plus/utilities/ui_utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -48,7 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MoviesBloc(moviesRepository: MovieRepository()),
+      create: (context) =>
+          MoviesBloc(moviesRepository: MovieRepository())..add(InitApp()),
       child: Builder(builder: (context) {
         moviesBloc = BlocProvider.of<MoviesBloc>(context);
         return Scaffold(
@@ -117,15 +119,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   } else if (state is MoviesLoaded) {
-                    return state.movies.results.isNotEmpty
+                    return state.movies.isNotEmpty
                         ? SliverList(
                             delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
-                              return _buildMovie(
-                                  index,
-                                  state.movies.results[index],
+                              return _buildMovie(index, state.movies[index],
                                   state.ratings[index]);
-                            }, childCount: state.movies.results.length),
+                            }, childCount: state.movies.length),
                           )
                         : SliverToBoxAdapter(
                             child: Column(
@@ -165,10 +165,13 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _formKey,
         child: TextFormField(
           controller: searchKeyController,
-          textAlign: TextAlign.center,
-          validator: (input) =>
-              input!.isEmpty ? 'Please enter a Movie title' : null,
-          onSaved: (input) => searchKey = input!,
+          textInputAction: TextInputAction.search,
+          onFieldSubmitted: (value) {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+              moviesBloc.add(SearchMovie(searchKeyController.text));
+            }
+          },
           decoration: const InputDecoration(
               hintText: "Type your search here",
               hintStyle: TextStyle(color: Colors.black26),
@@ -185,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildMovie(int index, Results movie, RatingModel rating) {
+  Widget _buildMovie(int index, Results movie, String rating) {
     return Container(
       margin: const EdgeInsets.all(20.0),
       child: ClipRRect(
@@ -199,7 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               Stack(children: <Widget>[
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FullPhotoScreen(url: movie.image),));
+                  },
                   child: movie.image.isEmpty
                       ? Image.network(
                           "http://enablementnepal.org/wp-content/themes/enablementnepal/img/image-not-found.jpg",
@@ -214,11 +219,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: 8,
                   child: GestureDetector(
                       onTap: () async {
-                        print("You tap");
                         List<Results> currentBookMark =
                             await MovieRepository().getBookMarks();
 
-                        if (currentBookMark.contains(movie)) {
+                        //Results sameMovie = currentBookMark.firstWhere((itemToCheck) => itemToCheck.id == movie.id);
+                        List<Results> same = currentBookMark
+                            .where((element) => element.id == movie.id)
+                            .toList();
+                        if (same.isNotEmpty) {
                           UIUtils.showToast("Movie already on Favourite list");
                         } else {
                           currentBookMark.add(movie);
@@ -234,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.all(10.0),
                       color: Colors.white,
                       child: RatingStars(
-                        value: double.parse(rating.imDb),
+                        value: double.parse(rating),
                         onValueChanged: (v) {
                           //
                           setState(() {
@@ -268,7 +276,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ))
               ]),
               GestureDetector(
-                onTap: () async {},
+                onTap: () async {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FullPhotoScreen(url: movie.image),));
+                },
                 child: Container(
                   padding: EdgeInsets.all(16.0),
                   child: Column(

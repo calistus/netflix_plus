@@ -12,14 +12,35 @@ part 'movies_state.dart';
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   MovieRepository moviesRepository;
 
-  MoviesBloc({required this.moviesRepository}) : super(MoviesInitial());
+  MoviesBloc({required this.moviesRepository}) : super(MoviesInitial()) ;
 
   @override
   Stream<MoviesState> mapEventToState(
     MoviesEvent event,
   ) async* {
-    if(event is SearchMovie){
+    if(event is InitApp){
+      yield* _mapInitAppEventToState();
+    }
+    else if(event is SearchMovie){
       yield* _mapSearchEventToState(event);
+    }
+  }
+
+  Stream<MoviesState> _mapInitAppEventToState() async*{
+    try{
+      yield MoviesLoading();
+
+      List<Results> currentBookMark = await MovieRepository().getBookMarks();
+      print(currentBookMark);
+
+      if(currentBookMark.isEmpty){
+        yield const MoviesInitial();
+      }else{
+        List<String> ratings = List.filled(currentBookMark.length, "0");
+        yield MoviesLoaded(currentBookMark, ratings);
+      }
+    }catch(e){
+      yield MoviesError(e.toString());
     }
   }
 
@@ -27,15 +48,15 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     try{
       yield MoviesLoading();
       MovieModel? movies =  await moviesRepository.searchMovie(event.searchExpression);
-      List<RatingModel> ratings = [];
+      List<String> ratings = [];
 
        for(var movie in movies!.results){
          RatingModel? rating = await moviesRepository.fetchMovieRating(movie.id);
-            ratings.add(rating!);
+            ratings.add(rating!.imDb);
       }
       
       if(movies.errorMessage.isEmpty){
-        yield MoviesLoaded(movies, ratings);
+        yield MoviesLoaded(movies.results, ratings);
       }else{
         yield MoviesError(movies.errorMessage);
       }
