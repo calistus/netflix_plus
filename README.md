@@ -5,6 +5,7 @@ A Simple Movies Search app.
 ## Before You run the app
 
 Rename the .env.example to .env and add your own IMDB API Key there.
+You can obtain a test key from the IMDB API website via this link: [https://imdb-api.com/api](https://imdb-api.com/api)
 
 
 ## Getting Started
