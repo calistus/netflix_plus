@@ -57,9 +57,16 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       var s2 = currentHidden.toSet();
 
       List<Results> filteredResult = s1.difference(s2).toList();
-      //s1.removeAll(s2);
-      //List<Results> filteredResult = s1.toList();
-      //List<Results> filteredResult = movieResult.removeWhere((element) => false).toList();
+
+      print("s1:"+s1.length.toString());
+      print("s2:"+s2.length.toString());
+      print("Filtered:"+filteredResult.length.toString());
+
+
+      // for( var movie in currentHidden){
+      //   movieResult.remove(movie);
+      // }
+      // print(movieResult.length);
 
       List<String> ratings = [];
 

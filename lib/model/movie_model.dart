@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 class MovieModel {
   MovieModel({
     required this.searchType,
@@ -33,7 +35,7 @@ class MovieModel {
   }
 }
 
-class Results {
+class Results extends Equatable {
   Results({
     required this.id,
     required this.resultType,
@@ -64,5 +66,8 @@ class Results {
     _data['description'] = description;
     return _data;
   }
+
+  @override
+  List<Object?> get props => [id, resultType, image, title, description];
 
 }
