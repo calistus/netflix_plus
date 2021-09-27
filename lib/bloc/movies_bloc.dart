@@ -53,26 +53,16 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       List<Results> currentHidden =
       await MovieRepository().getHiddenMovies();
 
-      var s1 = movieResult.toSet();
-      var s2 = currentHidden.toSet();
+      var moviesSet = movieResult.toSet();
+      var currentHiddenSet = currentHidden.toSet();
 
-      List<Results> filteredResult = s1.difference(s2).toList();
-
-      print("s1:"+s1.length.toString());
-      print("s2:"+s2.length.toString());
-      print("Filtered:"+filteredResult.length.toString());
-
-
-      // for( var movie in currentHidden){
-      //   movieResult.remove(movie);
-      // }
-      // print(movieResult.length);
+      List<Results> filteredResult = moviesSet.difference(currentHiddenSet).toList();
 
       List<String> ratings = [];
 
        for(var movie in filteredResult){
          RatingModel? rating = await moviesRepository.fetchMovieRating(movie.id);
-            ratings.add(rating!.imDb);
+            ratings.add(rating!.imDb??"0.0");
       }
       
       if(movies.errorMessage.isEmpty){

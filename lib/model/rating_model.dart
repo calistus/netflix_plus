@@ -13,18 +13,18 @@ class RatingModel {
     required this.filmAffinity,
     required this.errorMessage,
   });
-  late final String imDbId;
-  late final String title;
-  late final String fullTitle;
-  late final String type;
-  late final String year;
-  late final String imDb;
-  late final String metacritic;
-  late final String theMovieDb;
-  late final String rottenTomatoes;
-  late final String tVCom;
-  late final String filmAffinity;
-  late final String errorMessage;
+  late final String? imDbId;
+  late final String? title;
+  late final String? fullTitle;
+  late final String? type;
+  late final String? year;
+  late final String? imDb;
+  late final String? metacritic;
+  late final String? theMovieDb;
+  late final String? rottenTomatoes;
+  late final String? tVCom;
+  late final String? filmAffinity;
+  late final String? errorMessage;
 
   RatingModel.fromJson(Map<String, dynamic> json){
     imDbId = json['imDbId'];

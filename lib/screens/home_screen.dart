@@ -240,10 +240,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       padding: EdgeInsets.all(10.0),
                       color: Colors.white,
-                      child: RatingStars(
+                      child:
+                      RatingStars(
                         value: double.parse(rating),
                         onValueChanged: (v) {
-                          //
                           setState(() {
                             //value = v;
                           });
